@@ -2,6 +2,7 @@ import Search from "./components/Search";
 import { useState, useEffect } from "react";
 import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
+import { useDebounce } from "react-use";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -20,6 +21,16 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  // useDebounce é usado para evitar chamadas excessivas à API enquanto o usuário digita
+  useDebounce(
+    () => {
+      setDebouncedSearchTerm(searchTerm);
+    },
+    1000, // Tempo de espera em milissegundos
+    [searchTerm]
+  );
 
   const fetchMovies = async (query = "") => {
     // Setup inicial - fora do try
@@ -45,11 +56,6 @@ function App() {
 
       // "[]" Adicionado para proteção extra contra undefined/null
       setMovieList(data.results || []);
-
-      // ???
-      /*       if (data.Response === "False") {
-        setErrorMessage(data.Error || "Failed to fetch movies");
-      } */
     } catch (error) {
       console.log(`Error feching movies: ${error}`);
       setErrorMessage("Error fetching movies. Please try again later.");
@@ -59,9 +65,11 @@ function App() {
     }
   };
 
+  // debouncedSearchTerm é usado para evitar chamadas excessivas à API enquanto o usuário digita
+  // useEffect é usado para chamar a função fetchMovies quando o debouncedSearchTerm muda
   useEffect(() => {
-    fetchMovies(searchTerm);
-  }, [searchTerm]);
+    fetchMovies(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
   return (
     <main>
