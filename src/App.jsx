@@ -1,5 +1,6 @@
 import Search from "./components/Search";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import Spinner from "./components/Spinner";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -17,7 +18,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [movieList, setMovieList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchMovies = async () => {
     // Setup inicial - fora do try
@@ -50,7 +51,7 @@ function App() {
       setErrorMessage("Error fetching movies. Please try again later.");
     } finally {
       // O bloco finally é especialmente útil para garantir que setIsLoading(false) seja executado independentemente do resultado da operação.
-      setIsLoading(false);
+      setIsLoading(true);
     }
   };
 
@@ -73,7 +74,23 @@ function App() {
         <section className="all-movies">
           <h2>All Movies</h2>
 
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+          {isLoading ? (
+            <Spinner />
+          ) : errorMessage ? (
+            <p className="text-red-500">{errorMessage}</p>
+          ) : (
+            <ul>
+              {movieList.map((movie) => (
+                <div key={movie.id} className="movie-card">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                  />
+                  <h3>{movie.title}</h3>
+                </div>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
     </main>
