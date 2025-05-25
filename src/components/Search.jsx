@@ -1,19 +1,18 @@
-import React from 'react'
-
-function Search({searchTerm, setSearchTerm}) {
+function Search({ searchTerm, setSearchTerm }) {
   return (
-    <div className='search'>
-        <div>
-            <img src="search.svg" alt="search" />
+    <div className="search">
+      <div>
+        <img src="search.svg" alt="search" />
 
-            <input type="text"
-                placeholder='Search through 1000+ movies'
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-        </div>
+        <input
+          type="text"
+          placeholder="Search through 1000+ movies"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
     </div>
-  )
+  );
 }
 
-export default Search
+export default Search;
