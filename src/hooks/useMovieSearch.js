@@ -21,15 +21,13 @@ export function useMovieSearch() {
 
   /* useEffect é usado para chamar a função fetchMovies quando o "debouncedSearchTerm" muda */
   useEffect(() => {
-    // Função assíncrona para buscar os filmes
     const loadMovies = async () => {
       setIsLoading(true);
       setErrorMessage("");
 
-      // try-catch para lidar com erros na chamada da API
       try {
         const movies = await fetchMoviesAPI(debouncedSearchTerm);
-        setMovieList(movies);
+        setMovieList(movies || []); // Proteção extra contra undefined/null
       } catch (error) {
         setErrorMessage(
           error.message || "Failed to fetch movies. Please try again later."

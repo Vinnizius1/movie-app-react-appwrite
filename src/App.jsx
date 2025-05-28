@@ -26,6 +26,7 @@ function App() {
           <h2 className="mt-[40px]">
             {searchTerm ? `Results for "${searchTerm}"` : "All Movies"}
           </h2>
+
           {/* MovieList: Gerencia estados de loading, erro e renderização dos filmes */}
           <MovieList
             isLoading={isLoading}
